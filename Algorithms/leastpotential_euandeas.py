@@ -110,6 +110,3 @@ def FindPapers(pAllList):
             AuthorsDic[y].removePaper(x)
 
     return toBeSubmitted
-    
-
-
