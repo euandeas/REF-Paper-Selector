@@ -3,7 +3,7 @@ from collections import defaultdict
 def GetAuthorsList(mList):
     finalDic = defaultdict(int)
     for x in mList:
-        finalDic[x[0]] = None  
+        finalDic[x[0]] = 0  
     return finalDic
 
 def validate(inList, outList, maxPerAuthor):
