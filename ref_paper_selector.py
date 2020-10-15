@@ -4,20 +4,25 @@ import sys
 import getopt
 
 
+
 def HelpText():
     print("-i    input file name and location e.g. c:/user/REF/input.csv")
     print("-o    output file name (optional) - Default = output.csv saved in the same location as the input file.")
     print("-n    total number of unique papers to be selected")
     print("-r    selection algorithm to use e.g. leastpotential-euandeas")
 
-def Main(infile, outfile, n, runmode):
-    inList = OpenPaperList(infile)
+def Main(infile, outfile, n, runmode):   
+    try:
+        inList = OpenPaperList(infile)
+    except Exception as e:
+        print(e)
 
     if runmode == "leastpotential_euandeas":
         outList = leastpotential_euandeas.FindPapers(inList)
 
     SavePaperList(outList, outfile)
     print("Score: " + FindScore(outList))
+
 
 if __name__ == "__main__":
     argv = sys.argv[1:]
