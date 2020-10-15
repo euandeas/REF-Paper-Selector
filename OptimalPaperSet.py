@@ -11,8 +11,6 @@ iFileName = "default"
 oFileName = "default"
 
 class Author():
-    topBoundScore = 0
-    lowerBoundScore = 0 
     maxPapersPerAuthor = 0
     top5Total = 0
     numOfSubmittedPapers = 0
@@ -27,13 +25,11 @@ class Author():
     def removePaper(self, paperId):
         self.papers.pop(paperId)
         self.CalculateTotal()
-        #self.topBoundScore += 1
-        #self.lowerBoundScore += 1
             
     def CalculateTotal(self):
         total = 0
         tempList = list(self.papers.keys())
-        for key in tempList[self.topBoundScore:self.lowerBoundScore-1]:
+        for key in tempList[0:4]:
             total += float(self.papers[key])
         self.top5Total = total
 
