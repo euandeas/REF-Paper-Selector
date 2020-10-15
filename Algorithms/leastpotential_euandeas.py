@@ -70,10 +70,8 @@ def CreateAuthorsDic(mList):
 
     return finalDic
 
-def FindPapers(pAllList):
+def FindPapers(pAllList, numOfPapers):
     AuthorsDic = CreateAuthorsDic(pAllList)
-
-    # Dic of {paper, [authors]}
     pAList = GetPapersAuthorsDic(pAllList)
 
     toBeSubmitted = []
@@ -108,5 +106,8 @@ def FindPapers(pAllList):
         
         for y in tempListOfAuthors:
             AuthorsDic[y].removePaper(x)
+
+        if len(toBeSubmitted) == numOfPapers:
+            break
 
     return toBeSubmitted
