@@ -10,6 +10,7 @@ def HelpText():
     print("-n    total number of unique papers to be selected")
     print("-r    selection algorithm to use e.g. leastpotential_euandeas")
     print("-v    run validate_output.py on the final list to check the validity of the final list")
+    print("-vv    run validate_output.py on the final list to check the validity of the final list")
 
 def GetFinalList(inList, n, runmode):
     if runmode == "leastpotential-euandeas":
@@ -19,8 +20,6 @@ def GetFinalList(inList, n, runmode):
 
     return outList
 
-#Main("testpapers", "output", 200, "nottingham-lembn")
-
 if __name__ == "__main__":
     argv = sys.argv[1:]
     try:
@@ -28,7 +27,8 @@ if __name__ == "__main__":
         mainArgs = ["infile", "outfile", "number of papers (n)", "runmode"]
 
         opts, args = getopt.getopt(argv, 'i:o:n:r:h:v:')
-        validteList = False
+        validateList = False
+        verbose = False
         for opt, arg in opts:
             if opt == "-h":
                 HelpText()
@@ -44,9 +44,14 @@ if __name__ == "__main__":
                     mainArgs[3] = arg
                 elif opt == "-v":
                     validteList = True
+                elif opt == "-vv":
+                    validateList = True
+                    verbose = True
 
         #mainArgs = ["testpapers", "output", 50, "leastpotential-euandeas"]
-        #mainArgs = ["testpapers", "output", 50, "nottingham-lembn"]
+        mainArgs = ["testpapers", "output", 50, "nottingham-lembn"]
+        validateList = True
+        verbose = True
 
         if mainArgs[1] == "outfile":
             mainArgs[1] = "output"
@@ -66,10 +71,10 @@ if __name__ == "__main__":
             print("n must be less than (2.5 * number of authors) and greater tham (number of authors - 1)")
             exit()
         outList = GetFinalList(inList, mainArgs[2], mainArgs[3])
-        SavePaperList(outList, mainArgs[1])
+        #SavePaperList(outList, mainArgs[1])
         print("Score: " + str(FindScore(outList)))
-        if validteList == True:
-            validate(inList, outList, 5)
+        if validateList == True:
+            Validate(inList, outList, 5, verbose)
 
     except getopt.GetoptError:
         print('Something went wrong!')

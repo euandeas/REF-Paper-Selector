@@ -89,6 +89,20 @@ def Sort(arr, key, reverse=False):
     else:
         return list(reversed(sorted(arr, key=attrgetter(key))))
 
+#function to get authors with more than one submission
+def FindReplaceableAuthors(finalAuthors):
+    replaceableAuthors = []
+    for author in finalAuthors:
+        if len(author.submittedPapers) > 1:
+            replaceableAuthors.append(author)
+    return Sort(replaceableAuthors, "lowestSubmission.score") 
+
+def CheckSubmissions(fullList, selection):
+    for author in fullList:
+        if author not in selection:
+            return False
+    return True
+
 #function to submit papers
 def Submit(paper, author, finalPapers, finalAuthors):
     paper.submittedAuthor = author
@@ -168,31 +182,24 @@ def FindPapers(inList, n):
                 finalPapers, finalAuthors = Submit(paper, paper.validAuthors[authorIndex], finalPapers, finalAuthors)
                 n -= 1
 
-    #get authors with more than one submission
-    replaceableAuthors = []
-    for author in finalAuthors:
-        if len(author.submittedPapers) > 1:
-            replaceableAuthors.append(author)
-
-    #order replaceable authors from lowest to highest (by lowestSubmission)
-    submittedAuthors_lowestSub = Sort(replaceableAuthors, "lowestSubmission.score") 
-
+    submittedAuthors_lowestSub = FindReplaceableAuthors(finalAuthors)
     #loop to make sure all authors have at least one submitted paper
-    for author in authors:
-        if author not in finalAuthors:
-            #'replaceTarget' represents the author to be replaced
-            replaceTarget = submittedAuthors_lowestSub[0]
-            finalPapers.remove(replaceTarget.lowestSubmission)
-            replaceTarget.submittedPapers.remove(replaceTarget.lowestSubmission)
-            replaceTarget.unsubmittedPapers.append(replaceTarget.lowestSubmission)
+    while CheckSubmissions(authors, finalAuthors) == False:
+        for author in authors:
+            if author not in finalAuthors:
+                #'replaceTarget' represents the author to be replaced
+                replaceTarget = submittedAuthors_lowestSub[0]
+                finalPapers.remove(replaceTarget.lowestSubmission)
+                replaceTarget.submittedPapers.remove(replaceTarget.lowestSubmission)
+                replaceTarget.unsubmittedPapers.append(replaceTarget.lowestSubmission)
 
-            submittedAuthors_lowestSub[0].SetLowestSubmission(finalPapers)
-            submittedAuthors_lowestSub[0].CalculateValidity()
-            submittedAuthors_lowestSub = Sort(replaceableAuthors, "lowestSubmission.score") 
+                if len(replaceTarget.submittedPapers) == 0:
+                    finalAuthors.remove(replaceTarget)
 
-            if len(submittedAuthors_lowestSub[0].submittedPapers) == 1:
-                del submittedAuthors_lowestSub[0]
+                replaceTarget.SetLowestSubmission(finalPapers)
+                replaceTarget.CalculateValidity()
+                submittedAuthors_lowestSub = FindReplaceableAuthors(finalAuthors)
 
-            finalPapers, finalAuthors = Submit(author.GetHighestUnsubmittedPaper(), author, finalPapers, finalAuthors)
+                finalPapers, finalAuthors = Submit(author.GetHighestUnsubmittedPaper(), author, finalPapers, finalAuthors)
 
     return BuildOutlist(finalPapers)
