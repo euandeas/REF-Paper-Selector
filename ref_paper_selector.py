@@ -2,6 +2,7 @@ import sys
 import getopt
 from Algorithms import leastpotential_euandeas as lpe, nottingham_lembn as lbn
 from process_data import * 
+from validate_output import Validate
 
 def HelpText():
     print("-i    input file name and location e.g. c:/user/REF/input")

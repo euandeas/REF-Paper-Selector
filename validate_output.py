@@ -6,7 +6,7 @@ def GetAuthorsList(mList):
         finalDic[x[0]] = 0  
     return finalDic
 
-def validate(inList, outList, maxPerAuthor):
+def Validate(inList, outList, maxPerAuthor):
     authors = GetAuthorsList(inList)
     
     meetsReq = True
