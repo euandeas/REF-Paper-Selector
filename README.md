@@ -37,7 +37,7 @@ The script should print the final selection as a .csv file containing n outputs,
 
 -o = output file name (optional) - Default = output.csv saved in the same location as the input file.
 
--g = runs the script.
+-r = runmode (The selection algorithm you want to run)
 
 # Highest Score With Current Algorithm
 563.6
