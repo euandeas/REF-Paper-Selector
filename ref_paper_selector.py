@@ -1,5 +1,8 @@
-import Algorithms
-from process_data import * 
+from Algorithms import *
+from process_data import OpenPaperList, SavePaperList, FindScore
+import sys
+import getopt
+
 
 def HelpText():
     print("-i    input file name and location e.g. c:/user/REF/input.csv")
@@ -10,11 +13,11 @@ def HelpText():
 def Main(infile, outfile, n, runmode):
     inList = OpenPaperList(infile)
 
-    if runmode == "leastpotential-euandeas":
-        outList = leastpotential-euandeas.FindPapers()
+    if runmode == "leastpotential_euandeas":
+        outList = leastpotential_euandeas.FindPapers(inList)
 
     SavePaperList(outList, outfile)
-    print("Score: " + FindScore())
+    print("Score: " + FindScore(outList))
 
 if __name__ == "__main__":
     argv = sys.argv[1:]
@@ -43,9 +46,9 @@ if __name__ == "__main__":
                 empty.append(arg)
                 
         if len(empty) > 0:
-            print("Missing arguments : " empty)
+            print(f"Missing arguments : {empty}")
             exit()
 
-        SelectList(mainArgs[0], mainArgs[1], mainArgs[2], mainArgs[3])
+        Main(mainArgs[0], mainArgs[1], mainArgs[2], mainArgs[3])
     except getopt.GetoptError:
         print('Something went wrong!')    
