@@ -49,9 +49,9 @@ if __name__ == "__main__":
                     verbose = True
 
         #mainArgs = ["testpapers", "output", 50, "leastpotential-euandeas"]
-        mainArgs = ["testpapers", "output", 50, "nottingham-lembn"]
-        validateList = True
-        verbose = True
+        #mainArgs = ["testpapers", "output", 50, "nottingham-lembn"]
+        #validateList = True
+        #verbose = True
 
         if mainArgs[1] == "outfile":
             mainArgs[1] = "output"
