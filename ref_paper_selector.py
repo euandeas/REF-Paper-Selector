@@ -2,23 +2,22 @@ import sys
 import getopt
 from Algorithms import leastpotential_euandeas as lpe, nottingham_lembn as lbn
 from process_data import * 
+from validate_output import *
 
 def HelpText():
     print("-i    input file name and location e.g. c:/user/REF/input")
     print("-o    output file name (optional) - Default = output.csv saved in the same location as the input file.")
     print("-n    total number of unique papers to be selected")
     print("-r    selection algorithm to use e.g. leastpotential_euandeas")
+    print("-v    run validate_output.py on the final list to check the validity of the final list")
 
-def Main(infile, outfile, n, runmode):
-    inList = OpenPaperList(infile)
-
+def GetFinalList(inList, n, runmode):
     if runmode == "leastpotential-euandeas":
         outList = lpe.FindPapers(inList)
     elif runmode == "nottingham-lembn":
         outList = lbn.FindPapers(inList, n)
 
-    SavePaperList(outList, outfile)
-    print("Score: " + FindScore(outList))
+    return outList
 
 #Main("testpapers", "output", 200, "nottingham-lembn")
 
@@ -28,7 +27,8 @@ if __name__ == "__main__":
         params = ["infile", "outfile", "number of papers (n)", "runmode"]
         mainArgs = ["infile", "outfile", "number of papers (n)", "runmode"]
 
-        opts, args = getopt.getopt(argv, 'i:o:n:r:h:')
+        opts, args = getopt.getopt(argv, 'i:o:n:r:h:v:')
+        validteList = False
         for opt, arg in opts:
             if opt == "-h":
                 HelpText()
@@ -42,6 +42,11 @@ if __name__ == "__main__":
                     mainArgs[2] = int(arg)
                 elif opt == "-r":
                     mainArgs[3] = arg
+                elif opt == "-v":
+                    validteList = True
+
+        #mainArgs = ["testpapers", "output", 50, "leastpotential-euandeas"]
+        #mainArgs = ["testpapers", "output", 50, "nottingham-lembn"]
 
         if mainArgs[1] == "outfile":
             mainArgs[1] = "output"
@@ -53,8 +58,18 @@ if __name__ == "__main__":
                 
         if len(empty) > 0:
             print("Missing arguments: " + str(empty))
-            exit()
+            exit()        
 
-        Main(mainArgs[0], mainArgs[1], mainArgs[2], mainArgs[3])
+        inList = OpenPaperList(mainArgs[0])
+        numAuthors = len(GetAuthorsList(inList))
+        if mainArgs[2] < numAuthors or mainArgs[2] > 2.5 * numAuthors:
+            print("n must be less than (2.5 * number of authors) and greater tham (number of authors - 1)")
+            exit()
+        outList = GetFinalList(inList, mainArgs[2], mainArgs[3])
+        SavePaperList(outList, mainArgs[1])
+        print("Score: " + str(FindScore(outList)))
+        if validteList == True:
+            validate(inList, outList, 5)
+
     except getopt.GetoptError:
         print('Something went wrong!')

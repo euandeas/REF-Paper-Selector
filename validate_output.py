@@ -28,7 +28,3 @@ def validate(inList, outList, maxPerAuthor):
     print(f"Total errors: {numberOfAuthorsWithNoPapers + numberOfAuthorsWithToManyPapers}")
     print(f"Total number of authors with no papers: {numberOfAuthorsWithNoPapers}")
     print(f"Total number of authors with to many papers: {numberOfAuthorsWithNoPapers}")
-
-
-
-
