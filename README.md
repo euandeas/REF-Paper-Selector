@@ -37,3 +37,5 @@ The script should print the final selection as a .csv file containing n outputs,
 
 -o = output file name (optional) - Default = output.csv saved in the same location as the input file.
 
+-g = runs the script.
+
