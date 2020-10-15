@@ -39,3 +39,8 @@ The script should print the final selection as a .csv file containing n outputs,
 
 -g = runs the script.
 
+# Highest Score With Current Algorithm
+563.6
+
+This is using no cap on the total number of unique papers.
+
