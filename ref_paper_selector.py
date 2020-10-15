@@ -34,7 +34,7 @@ if __name__ == "__main__":
                     mainArgs[1] = arg
                 elif opt == "-n":
                     mainArgs[2] = arg
-                elif opt == "-r"
+                elif opt == "-r":
                     mainArgs[3] = int(arg)
 
         empty = []
