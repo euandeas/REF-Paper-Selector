@@ -1,10 +1,3 @@
-###Sort all papers in desc order by score
-###Add papers to final list as the program traverses though the list of papers
-###If there is more than one author of a paper, submit the paper with the author with the lowest value
-###Value represents the total amount of score an author could potentially add to the final score at any given time
-###At the end, make a list of all authors with more than one submitted paper - order by score of their lowest scoring paper asc 
-###Authors in this list will have their lowest scoring paper replaced by the highest scoring paper of unsubmitted authors
-
 from operator import attrgetter
 
 #class to represent authors
