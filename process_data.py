@@ -11,7 +11,6 @@ def OpenPaperList(iFileName):
             else:
                 paperList.append([row[0],row[1],row[2]])
                 line_count += 1
-            #print(f'Processed {line_count} lines.')
     return paperList
 
 def SavePaperList(mList, oFileName):
@@ -26,3 +25,6 @@ def FindScore(mList):
     for n in mList:
         total += n[2]
     return total
+
+def RoundScore(score):
+    return (round(score * 5) / 5)
