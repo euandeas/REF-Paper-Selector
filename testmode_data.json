@@ -1,5 +1,6 @@
 {
-    "requiredArgs": "{'infile (-i)': 'testpapers.csv', 'number of papers (-n)': 50, 'runmode(-r)': 'leastpotential_euandeas'}",                     
+    "requiredArgs": "{'infile (-i)': 'testpapers.csv', 'number of papers (-n)': 50, 'runmode(-r)': 'leastpotential_euandeas'}",
+    "maxN": true,                     
     "save": false,
     "savePath": "output.csv",
     "validateList": true,
