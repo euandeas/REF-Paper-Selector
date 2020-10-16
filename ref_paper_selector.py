@@ -7,7 +7,7 @@ from validate_output import *
 
 testmode = True
 def RunTestMode(mainArgs, validateList, verbose):
-    with open('testdata.txt') as dataFile:
+    with open('testmode_data.txt') as dataFile:
         data = dataFile.readlines()
         if testmode == True:
             mainArgs = data[0].strip().split(sep=",")
