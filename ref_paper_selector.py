@@ -1,31 +1,12 @@
 import sys
 import getopt
-import ast
-import json
 import math
 from Algorithms import leastpotential_euandeas as lpe, nottingham_lembn as lbn
-from process_data import * 
-from validate_output import *
+import process_data as processor
+import validate_output as validator
+import testtools as tt
 
 testmode = True
-
-class TestDataObject:
-    def __init__(self):
-        with open('testmode_data.json') as dataFile:
-            data = json.load(dataFile)
-            self.requiredArgs = ast.literal_eval(data['requiredArgs'])
-            self.requiredArgs[n] = int(self.requiredArgs[n])
-            self.maxN = data['maxN']
-            self.save = data['save']
-            self.savePath = data['savePath']
-            self.validateList = data['validateList']
-            self.authorLim = int(data['authorLim'])
-            self.verbose = data['verbose']
-            self.showScore = data['showScore']
-            self.showRawScore = data['showRawScore']
-
-    def GetData(self):
-        return self.requiredArgs, self.maxN, self.save, self.savePath, self.validateList, self.authorLim, self.verbose, self.showScore, self.showRawScore
 
 def HelpText():
     print("-i              input file name and location e.g. c:/user/REF/input.csv")
@@ -59,15 +40,15 @@ def GetFinalList(inList, n, runmode):
 
 def Finalise():
     if save == True:
-        SavePaperList(outList, savePath)
+        processor.SavePaperList(outList, savePath)
 
     if validateList == True:
-        Validate(inList, outList, authorLim, verbose)
+        validator.Validate(inList, outList, authorLim, verbose)
 
     if showScore == True:
-        print(f"\nScore: {RoundScore(FindScore(outList))}")
+        print(f"\nScore: {processor.RoundScore(processor.FindScore(outList))}")
     elif showRawScore == True:
-        print(f"\nScore: {FindScore(outList)}")
+        print(f"\nScore: {processor.FindScore(outList)}")
 
 if __name__ == "__main__":
     argv = sys.argv[1:]
@@ -116,8 +97,9 @@ if __name__ == "__main__":
                         showScore = False                
 
         if testmode == True:
-            dataObj = TestDataObject()
-            requiredArgs, maxN, save, savePath, validateList, authorLim, verbose, showScore, showRawScore = dataObj.GetData()
+            dataObj = tt.TestDataObject()
+            requiredArgs, maxN, save, savePath, validateList, authorLim, verbose, showScore, showRawScore = dataObj.GetData()            
+            requiredArgs[n] = int(requiredArgs[n])
 
         empty = []
         for arg in requiredArgs:
@@ -128,8 +110,8 @@ if __name__ == "__main__":
             print(f"Missing arguments: {empty}")
             exit()        
 
-        inList = OpenPaperList(requiredArgs[infile])
-        numAuthors = len(GetAuthorsList(inList))
+        inList = processor.OpenPaperList(requiredArgs[infile])
+        numAuthors = len(validator.GetAuthorsList(inList))
         highestN = 2.5 * numAuthors
         if maxN == True:
             requiredArgs[n] = math.trunc(highestN)
