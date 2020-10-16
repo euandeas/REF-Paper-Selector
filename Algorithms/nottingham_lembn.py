@@ -143,7 +143,7 @@ def BuildObjects(inList):
 def BuildOutlist(papers):
     outlist = []
     for paper in papers:
-        outlist.append([paper.submittedAuthor.authorID, paper.paperID, paper.score])
+        outlist.append([paper.paperID, paper.submittedAuthor.authorID, paper.score])
     return outlist
 
 def FindPapers(inList, n):

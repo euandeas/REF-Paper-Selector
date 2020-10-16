@@ -10,12 +10,12 @@ def HelpText():
     print("-n    total number of unique papers to be selected")
     print("-r    selection algorithm to use e.g. leastpotential_euandeas")
     print("-v    run validate_output.py on the final list to check the validity of the final list")
-    print("-vv    run validate_output.py on the final list to check the validity of the final list")
+    print("-vv   run validate_output.py with verbose output")
 
 def GetFinalList(inList, n, runmode):
-    if runmode == "leastpotential-euandeas":
+    if runmode == "leastpotential_euandeas":
         outList = lpe.FindPapers(inList, n)
-    elif runmode == "nottingham-lembn":
+    elif runmode == "nottingham_lembn":
         outList = lbn.FindPapers(inList, n)
 
     return outList
@@ -48,8 +48,8 @@ if __name__ == "__main__":
                     validateList = True
                     verbose = True
 
-        #mainArgs = ["testpapers", "output", 50, "leastpotential-euandeas"]
-        #mainArgs = ["testpapers", "output", 50, "nottingham-lembn"]
+        #mainArgs = ["testpapers", "output", 50, "leastpotential_euandeas"]
+        #mainArgs = ["testpapers", "output", 50, "nottingham_lembn"]
         #validateList = True
         #verbose = True
 
@@ -71,7 +71,7 @@ if __name__ == "__main__":
             print("n must be less than (2.5 * number of authors) and greater tham (number of authors - 1)")
             exit()
         outList = GetFinalList(inList, mainArgs[2], mainArgs[3])
-        #SavePaperList(outList, mainArgs[1])
+        SavePaperList(outList, mainArgs[1])
         print("Score: " + str(FindScore(outList)))
         if validateList == True:
             Validate(inList, outList, 5, verbose)

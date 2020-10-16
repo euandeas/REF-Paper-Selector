@@ -15,7 +15,7 @@ def Validate(inList, outList, maxPerAuthor, verbose):
     authorsWithMultiplePapers = []
     
     for x in outList:
-        authors[x[0]] += 1
+        authors[x[1]] += 1
 
     for y in authors:
         if authors[y] == 0:
@@ -29,23 +29,23 @@ def Validate(inList, outList, maxPerAuthor, verbose):
         if authors[a] > 1:
             authorsWithMultiplePapers.append(a)
     
-    numberOfAuthorsWithNoPapers = len(authorsWithNoPapers)
-    numberOfAuthorsWithTooManyPapers = len(authorsWithTooManyPapers)
-    numberOfAuthorsWithMultiplePapers = len(authorsWithMultiplePapers)
+    numberNoPapers = len(authorsWithNoPapers)
+    numberTooManyPapers = len(authorsWithTooManyPapers)
+    numberMultiplePapers = len(authorsWithMultiplePapers)
 
     if verbose == True:
         print()
         print(f"Valid results?: {meetsReq}")
-        print(f"Total errors: {numberOfAuthorsWithNoPapers + numberOfAuthorsWithTooManyPapers}")
+        print(f"Total errors: {numberNoPapers + numberTooManyPapers}")
         print(f"Authors with no papers: {authorsWithNoPapers}")
-        print(f"Total number of authors with no papers: {numberOfAuthorsWithNoPapers}")
+        print(f"Total number of authors with no papers: {numberNoPapers}")
         print(f"Authors with too many papers: {authorsWithTooManyPapers}")
-        print(f"Total number of authors with too many papers: {numberOfAuthorsWithTooManyPapers}")
+        print(f"Total number of authors with too many papers: {numberTooManyPapers}")
         print(f"Authors with multiple papers: {authorsWithMultiplePapers}")
-        print(f"Total number of authors with multiple papers: {numberOfAuthorsWithMultiplePapers}")
+        print(f"Total number of authors with multiple papers: {numberMultiplePapers}")
     else:
         print()
         print(f"Valid results?: {meetsReq}")
-        print(f"Total errors: {numberOfAuthorsWithNoPapers + numberOfAuthorsWithTooManyPapers}")
-        print(f"Total number of authors with no papers: {numberOfAuthorsWithNoPapers}")
-        print(f"Total number of authors with too many papers: {numberOfAuthorsWithTooManyPapers}")
+        print(f"Total errors: {numberNoPapers + numberTooManyPapers}")
+        print(f"Total number of authors with no papers: {numberNoPapers}")
+        print(f"Total number of authors with too many papers: {numberTooManyPapers}")
