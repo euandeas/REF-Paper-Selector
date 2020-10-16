@@ -30,9 +30,9 @@ class Author:
         self.value = topScores
 
     #function to calculate the lowest scoring submitted paper of an author
-    def SetLowestSubmission(self):
+    def SetLowestSubmission(self, finalPapers):
         for paper in self.submittedPapers:
-            if self.lowestSubmission == None:
+            if self.lowestSubmission == None or self.lowestSubmission not in finalPapers:
                 self.lowestSubmission = paper
             else:
                 if paper.score < self.lowestSubmission.score:
@@ -47,10 +47,16 @@ class Author:
         return highestPaper
 
     #function to declare an author as invalid across the program
-    def Invalidate(self):
-        for paper in self.unsubmittedPapers:
-            paper.validAuthors.remove(self)
-
+    def CalculateValidity(self):
+        if len(self.submittedPapers) >= 5:
+            for paper in self.unsubmittedPapers:
+                paper.validAuthors.remove(self)
+                paper.invalidAuthors.append(self)
+        else:
+            for paper in self.unsubmittedPapers:
+                paper.validAuthors.append(self)
+                if self in paper.invalidAuthors:
+                    paper.invalidAuthors.remove(self)
 
 #class to represent papers
 class Paper:
@@ -58,6 +64,7 @@ class Paper:
         self.paperID = paperID
         self.authors = []
         self.validAuthors = self.authors
+        self.invalidAuthors = []
         self.authors.append(author)
         self.score = float(score)
         self.submittedAuthor = None
@@ -75,6 +82,26 @@ def GetObjectByID(target, arr, runmode):
                 return author
         return False
 
+#function to sort lists by 'key'
+def Sort(arr, key, reverse=False):
+    if reverse == False:
+        return sorted(arr, key=attrgetter(key))
+    else:
+        return list(reversed(sorted(arr, key=attrgetter(key))))
+
+#function to get authors with more than one submission
+def FindReplaceableAuthors(finalAuthors):
+    replaceableAuthors = []
+    for author in finalAuthors:
+        if len(author.submittedPapers) > 1:
+            replaceableAuthors.append(author)
+    return Sort(replaceableAuthors, "lowestSubmission.score") 
+
+def CheckSubmissions(fullList, selection):
+    for author in fullList:
+        if author not in selection:
+            return False
+    return True
 
 #function to submit papers
 def Submit(paper, author, finalPapers, finalAuthors):
@@ -82,11 +109,10 @@ def Submit(paper, author, finalPapers, finalAuthors):
     finalPapers.append(paper)
     author.submittedPapers.append(paper)
     author.unsubmittedPapers.remove(paper)
-    author.SetLowestSubmission()
+    author.SetLowestSubmission(finalPapers)
     if author not in finalAuthors:
         finalAuthors.append(author)
-    if len(author.submittedPapers) == 5:
-        author.Invalidate()
+    author.CalculateValidity()
     author.CalculateValue()
 
     return finalPapers, finalAuthors
@@ -126,7 +152,7 @@ def FindPapers(inList, n):
     papers, authors = BuildObjects(inList)
 
     #order papers from highest to lowest (by score)
-    ranked_papers = list(reversed(sorted(papers, key=attrgetter('score'))))
+    ranked_papers = Sort(papers, "score", reverse=True)
 
     #assign papers to the authors who wrote them
     #assing from the ranked list so authors.unsubmittedPapers will be ordered DESC
@@ -156,24 +182,24 @@ def FindPapers(inList, n):
                 finalPapers, finalAuthors = Submit(paper, paper.validAuthors[authorIndex], finalPapers, finalAuthors)
                 n -= 1
 
-    #get authors with more than one submission
-    replaceableAuthors = []
-    for author in finalAuthors:
-        if len(author.submittedPapers) > 1:
-            replaceableAuthors.append(author)
-
-    #order replaceable authors from lowest to highest (by lowestSubmission)
-    submittedAuthors_lowestSub = sorted(replaceableAuthors, key=attrgetter('lowestSubmission.score'))
-
+    submittedAuthors_lowestSub = FindReplaceableAuthors(finalAuthors)
     #loop to make sure all authors have at least one submitted paper
-    for author in authors:
-        if author not in finalAuthors:
-            #'replaceTarget' represents the author to be replaced
-            replaceTarget = submittedAuthors_lowestSub[0]
-            finalPapers.remove(replaceTarget.lowestSubmission)
-            replaceTarget.submittedPapers.remove(replaceTarget.lowestSubmission)
-            replaceTarget.unsubmittedPapers.append(replaceTarget.lowestSubmission)
-            del submittedAuthors_lowestSub[0]
-            finalPapers, finalAuthors = Submit(author.GetHighestUnsubmittedPaper(), author, finalPapers, finalAuthors)
+    while CheckSubmissions(authors, finalAuthors) == False:
+        for author in authors:
+            if author not in finalAuthors:
+                #'replaceTarget' represents the author to be replaced
+                replaceTarget = submittedAuthors_lowestSub[0]
+                finalPapers.remove(replaceTarget.lowestSubmission)
+                replaceTarget.submittedPapers.remove(replaceTarget.lowestSubmission)
+                replaceTarget.unsubmittedPapers.append(replaceTarget.lowestSubmission)
+
+                if len(replaceTarget.submittedPapers) == 0:
+                    finalAuthors.remove(replaceTarget)
+
+                replaceTarget.SetLowestSubmission(finalPapers)
+                replaceTarget.CalculateValidity()
+                submittedAuthors_lowestSub = FindReplaceableAuthors(finalAuthors)
+
+                finalPapers, finalAuthors = Submit(author.GetHighestUnsubmittedPaper(), author, finalPapers, finalAuthors)
 
     return BuildOutlist(finalPapers)

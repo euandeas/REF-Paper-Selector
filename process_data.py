@@ -11,7 +11,7 @@ def OpenPaperList(iFileName):
             else:
                 paperList.append([row[0],row[1],row[2]])
                 line_count += 1
-            print(f'Processed {line_count} lines.')
+            #print(f'Processed {line_count} lines.')
     return paperList
 
 def SavePaperList(mList, oFileName):
