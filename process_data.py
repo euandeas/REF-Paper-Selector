@@ -1,7 +1,7 @@
 import csv
 
 def OpenPaperList(iFileName):
-    with open(f'{iFileName}.csv') as csv_file:
+    with open(iFileName) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         line_count = 0
         paperList = []
@@ -15,7 +15,7 @@ def OpenPaperList(iFileName):
     return paperList
 
 def SavePaperList(mList, oFileName):
-    with open(f'{oFileName}.csv', 'w', newline='') as csv_file:
+    with open(oFileName, 'w', newline='') as csv_file:
         writer = csv.writer(csv_file)
         writer.writerow(["Paper","Author","Score"])
         for n in mList:

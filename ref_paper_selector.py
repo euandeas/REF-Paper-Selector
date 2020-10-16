@@ -19,7 +19,7 @@ def RunTestMode(mainArgs, validateList, verbose):
     return mainArgs, validateList, verbose, save
 
 def HelpText():
-    print("-i    input file name and location e.g. c:/user/REF/input")
+    print("-i    input file name and location e.g. c:/user/REF/input.csv")
     print("-o    output file name (optional) - Default = output.csv saved in the same location as the input file.")
     print("-n    total number of unique papers to be selected")
     print("-r    selection algorithm to use e.g. leastpotential_euandeas")
@@ -65,7 +65,7 @@ if __name__ == "__main__":
         mainArgs, validateList, verbose, save = RunTestMode(mainArgs, validateList, verbose)
 
         if mainArgs[1] == "outfile":
-            mainArgs[1] = "output"
+            mainArgs[1] = "output.csv"
 
         empty = []
         for arg in mainArgs:
