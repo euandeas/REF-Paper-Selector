@@ -46,5 +46,5 @@ The script should print the final selection as a .csv file containing n outputs,
 # Highest Score Out Of Current Algorithms
 n/a
 
-This should be done using the test data in the repositry along with a cap of 50 papers.
+This should be done using the test data in the repositry, along with a cap of 50 papers.
 
