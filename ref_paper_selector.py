@@ -14,7 +14,7 @@ def HelpText():
 
 def GetFinalList(inList, n, runmode):
     if runmode == "leastpotential-euandeas":
-        outList = lpe.FindPapers(inList)
+        outList = lpe.FindPapers(inList, n)
     elif runmode == "nottingham-lembn":
         outList = lbn.FindPapers(inList, n)
 
