@@ -8,6 +8,7 @@ def GetAuthorsList(mList):
 
 def Validate(inList, outList, maxPerAuthor, verbose):
     authors = GetAuthorsList(inList)
+    numOfPapers = len(outList)
     
     meetsReq = True
     authorsWithNoPapers = []
@@ -15,7 +16,7 @@ def Validate(inList, outList, maxPerAuthor, verbose):
     authorsWithMultiplePapers = []
     
     for x in outList:
-        authors[x[0]] += 1
+        authors[x[1]] += 1
 
     for y in authors:
         if authors[y] == 0:
@@ -35,6 +36,7 @@ def Validate(inList, outList, maxPerAuthor, verbose):
 
     if verbose == True:
         print()
+        print(f"Papers Tested: {numOfPapers}")
         print(f"Valid results?: {meetsReq}")
         print(f"Total errors: {numberOfAuthorsWithNoPapers + numberOfAuthorsWithTooManyPapers}")
         print(f"Authors with no papers: {authorsWithNoPapers}")
@@ -45,6 +47,7 @@ def Validate(inList, outList, maxPerAuthor, verbose):
         print(f"Total number of authors with multiple papers: {numberOfAuthorsWithMultiplePapers}")
     else:
         print()
+        print(f"Papers Tested: {numOfPapers}")
         print(f"Valid results?: {meetsReq}")
         print(f"Total errors: {numberOfAuthorsWithNoPapers + numberOfAuthorsWithTooManyPapers}")
         print(f"Total number of authors with no papers: {numberOfAuthorsWithNoPapers}")
