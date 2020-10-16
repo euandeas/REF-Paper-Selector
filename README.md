@@ -33,11 +33,15 @@ The script should print the final selection as a .csv file containing n outputs,
 # Commands
 -i = input file name and location e.g. c:/user/REF/input.csv
 
--n = total number of unique papers to be selected - n must be integer greater or equal to the number of authors in the input file and less than 2.5*n. (**NOT YET IMPLEMENTED**)
+-n = total number of unique papers to be selected - n must be integer greater or equal to the number of authors in the input file and less than 2.5*n.
 
 -o = output file name (optional) - Default = output.csv saved in the same location as the input file.
 
 -r = runmode (The selection algorithm you want to run)
+
+-v = will check the validity of the final list of papers
+
+-vv = will check the validity of the final list in verbose mode
 
 # Highest Score Out Of Current Algorithms
 563.6
