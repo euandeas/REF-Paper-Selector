@@ -1,8 +1,22 @@
 import sys
 import getopt
+from distutils.util import strtobool
 from Algorithms import leastpotential_euandeas as lpe, nottingham_lembn as lbn
 from process_data import * 
 from validate_output import *
+
+testmode = True
+def RunTestMode(mainArgs, validateList, verbose):
+    with open('testdata.txt') as dataFile:
+        data = dataFile.readlines()
+        if testmode == True:
+            mainArgs = data[0].strip().split(sep=",")
+            mainArgs[2] = int(mainArgs[2])
+            validateList = bool(strtobool(data[1].strip()))
+            verbose = bool(strtobool(data[2].strip()))
+            save = bool(strtobool(data[3].strip()))
+
+    return mainArgs, validateList, verbose, save
 
 def HelpText():
     print("-i    input file name and location e.g. c:/user/REF/input")
@@ -48,10 +62,7 @@ if __name__ == "__main__":
                     validateList = True
                     verbose = True
 
-        #mainArgs = ["testpapers", "output", 50, "leastpotential_euandeas"]
-        #mainArgs = ["testpapers", "output", 50, "nottingham_lembn"]
-        #validateList = True
-        #verbose = True
+        mainArgs, validateList, verbose, save = RunTestMode(mainArgs, validateList, verbose)
 
         if mainArgs[1] == "outfile":
             mainArgs[1] = "output"
@@ -71,7 +82,8 @@ if __name__ == "__main__":
             print("n must be less than (2.5 * number of authors) and greater tham (number of authors - 1)")
             exit()
         outList = GetFinalList(inList, mainArgs[2], mainArgs[3])
-        SavePaperList(outList, mainArgs[1])
+        if save == True:
+            SavePaperList(outList, mainArgs[1])
         print("Score: " + str(FindScore(outList)))
         if validateList == True:
             Validate(inList, outList, 5, verbose)
