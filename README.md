@@ -33,15 +33,20 @@ The script should print the final selection as a .csv file containing n outputs,
 # Commands
 -i = input file name and location e.g. c:/user/REF/input.csv
 
--n = total number of unique papers to be selected - n must be integer greater or equal to the number of authors in the input file and less than 2.5*number of authors.
-
--o = output file name (optional) - Default = output.csv saved in the same location as the input file.
-
 -r = runmode (The selection algorithm you want to run)
 
--v = will check the validity of the final list of papers
+-n = total number of unique papers to be selected. n must be integer greater or equal to the number of authors in the input file and less than 2.5*number of authors.<br>
+-n max = set n to the highest possible value with the given dataset.
 
--vv = will check the validity of the final list in verbose mode
+-o = save to output.csv saved in the same location as the input file.
+-o [filepath] = save to custom filepath.
+
+-v = run validate_output.py on the final list to check the validity of the final list") 
+-v x = validate with a limit of x papers per author (default = 5)")
+-v true = run validate_output.py in verbose mode\n")    
+
+-s = show score of produced list (rounded down to the nearest 0.2)")
+-s raw = show the raw value of the score")
 
 # Highest Score Out Of Current Algorithms
 171.2
