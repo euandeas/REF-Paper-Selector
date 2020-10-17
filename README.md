@@ -44,7 +44,7 @@ The script should print the final selection as a .csv file containing n outputs,
 -vv = will check the validity of the final list in verbose mode
 
 # Highest Score Out Of Current Algorithms
-n/a
+171.2
 
 This should be done using the test data in the repositry, along with a cap of 50 papers.
 
