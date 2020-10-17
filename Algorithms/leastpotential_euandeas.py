@@ -1,4 +1,3 @@
-# Highest score = 563.6
 from collections import defaultdict
 
 class Author():
