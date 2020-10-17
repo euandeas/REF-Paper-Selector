@@ -23,7 +23,7 @@ def HelpText():
 
     print("-v              run validate_output.py on the final list to check the validity of the final list") 
     print("OPTIONS:")
-    print("-v n            validate with a limit of n papers per author (default = 5)")
+    print("-v [x]            validate with a limit of x papers per author (default = 5)")
     print("-v true         run validate_output.py in verbose mode\n")    
     
     print("-s              show score of produced list (rounded down to the nearest 0.2)")
