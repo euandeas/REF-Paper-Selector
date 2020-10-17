@@ -1,25 +1,4 @@
-from operator import attrgetter
 import refObject as ro
-
-#function to return a paper from 'papers'. Returns False if not in list
-def GetObjectByID(target, arr, runmode):
-    if runmode == "p":
-        for paper in arr:
-            if paper.paperID == target:
-                return paper
-        return False
-    elif runmode == "a":
-        for author in arr:
-            if author.authorID == target:
-                return author
-        return False
-
-#function to sort lists by 'key'
-def Sort(arr, key, reverse=False):
-    if reverse == False:
-        return sorted(arr, key=attrgetter(key))
-    else:
-        return list(reversed(sorted(arr, key=attrgetter(key))))
 
 #function to get authors with more than one submission
 def FindReplaceableAuthors(finalAuthors):
@@ -27,7 +6,7 @@ def FindReplaceableAuthors(finalAuthors):
     for author in finalAuthors:
         if len(author.submittedPapers) > 1:
             replaceableAuthors.append(author)
-    return Sort(replaceableAuthors, "lowestSubmission.score") 
+    return ro.Sort(replaceableAuthors, "lowestSubmission.score") 
 
 def CheckSubmissions(fullList, selection):
     leftOut = []
@@ -53,53 +32,16 @@ def Submit(paper, author, finalPapers, finalAuthors):
 
     return finalPapers, finalAuthors
 
-#statment to parse data from csv
-def BuildObjects(inList):
-    papers = []
-    authors = []
-
-    for row in inList:
-        authorID = row[0]
-        paperID = row[1]        
-        paperScore = row[2]
-
-        author = GetObjectByID(authorID, authors, "a")
-        if author == False:
-            author = ro.Author(authorID)
-            authors.append(author)
-
-        paper = GetObjectByID(paperID, papers, "p")
-        if paper == False:
-            papers.append(ro.Paper(paperID, author, paperScore))
-        else:
-            paper.authors.append(author)
-
-    return papers, authors
-
-def BuildOutlist(papers):
-    outlist = []
-    for paper in papers:
-        outlist.append([paper.paperID, paper.submittedAuthor.authorID, paper.score])
-    return outlist
-
 def FindPapers(inList, n):
     finalPapers = []
     finalAuthors = []
-    papers, authors = BuildObjects(inList)
-
-    #order papers from highest to lowest (by score)
-    ranked_papers = Sort(papers, "score", reverse=True)
-
-    #assign papers to the authors who wrote them
-    #assing from the ranked list so authors.unsubmittedPapers will be ordered DESC
-    for paper in ranked_papers:
-        for author in paper.authors:
-            author.unsubmittedPapers.append(paper)
+    papers, authors = ro.BuildObjects(inList)    
 
     for author in authors:
         author.CalculateValue()
 
     #begin selection process
+    ranked_papers = ro.Sort(papers, "score", reverse=True)
     for paper in ranked_papers:
         if n > 0:
             authorIndex = 0
@@ -135,7 +77,7 @@ def FindPapers(inList, n):
             replaceTarget.CalculateValidity()
             submittedAuthors_lowestSub = FindReplaceableAuthors(finalAuthors)
 
-            finalPapers, finalAuthors = Submit(author.GetHighestUnsubmittedPaper(finalPapers), author, finalPapers, finalAuthors)
+            finalPapers, finalAuthors = Submit(author.GetHighestSubmittablePaper(finalPapers), author, finalPapers, finalAuthors)
         subCheck, unsubmittedAuthors = CheckSubmissions(authors, finalAuthors)
 
-    return BuildOutlist(finalPapers)
+    return ro.BuildOutlist(finalPapers)

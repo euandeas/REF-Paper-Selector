@@ -1,7 +1,7 @@
 import sys
 import getopt
 import math
-from Algorithms import leastpotential_euandeas as lpe, nottingham_lembn as lbn
+from Algorithms import leastpotential_euandeas as lpe, nottingham_lembn as nlbn, abased_lembn as albn
 import process_data as processor
 import validate_output as validator
 import testtools as tt
@@ -34,7 +34,9 @@ def GetFinalList(inList, n, runmode):
     if runmode == "leastpotential_euandeas":
         outList = lpe.FindPapers(inList, n)
     elif runmode == "nottingham_lembn":
-        outList = lbn.FindPapers(inList, n)
+        outList = nlbn.FindPapers(inList, n)
+    elif runmode == "abased_lembn":
+        outList = albn.FindPapers(inList, n)
 
     return outList
 

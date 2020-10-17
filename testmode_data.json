@@ -1,11 +1,11 @@
 {
-    "requiredArgs": "{'infile (-i)': 'testpapers.csv', 'number of papers (-n)': 50, 'runmode(-r)': 'leastpotential_euandeas'}",
-    "maxN": true,                     
+    "requiredArgs": "{'infile (-i)': 'testpapers.csv', 'number of papers (-n)': 50, 'runmode(-r)': 'abased_lembn'}",
+    "maxN": false,                     
     "save": false,
     "savePath": "output.csv",
     "validateList": true,
     "authorLim": 5,
-    "verbose": false,
-    "showScore": true,
-    "showRawScore": false
+    "verbose": true,
+    "showScore": false,
+    "showRawScore": true
 }
