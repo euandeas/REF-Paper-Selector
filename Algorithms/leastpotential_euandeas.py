@@ -26,7 +26,6 @@ class Author():
 
     def __init__(self, papersList, maxPapersPerAuthor):
         self.papers = {k: v for k, v in sorted(papersList.items(), key=lambda item: item[1],reverse= True)}
-        self.lowerBoundScore = maxPapersPerAuthor
         self.maxPapersPerAuthor = maxPapersPerAuthor
         self.CalculateTotal()
 
@@ -110,4 +109,28 @@ def FindPapers(pAllList, numOfPapers):
         if len(toBeSubmitted) == numOfPapers:
             break
 
+    for n in AuthorsDic:
+        if AuthorsDic[n].numOfSubmittedPapers == 0:
+            for x in AuthorsDic[n].papers:
+                if any(x in sublist for sublist in toBeSubmitted):
+                    for sublist in toBeSubmitted:
+                        if AuthorsDic[sublist[1]].numOfSubmittedPapers > 1 and sublist[0] == x:
+                            index = toBeSubmitted.index(sublist)
+                            AuthorsDic[sublist[1]].numOfSubmittedPapers -= 1
+                            toBeSubmitted[index][1] = n
+                            AuthorsDic[n].numOfSubmittedPapers += 1
+                            break
+                            break
+                else:
+                    for sublist in toBeSubmitted[::-1]: 
+                        if AuthorsDic[sublist[1]].numOfSubmittedPapers > 1:
+                            index = toBeSubmitted.index(sublist)
+                            AuthorsDic[sublist[1]].numOfSubmittedPapers -= 1
+                            AuthorsDic[n].numOfSubmittedPapers += 1
+                            toBeSubmitted[index] = [x, n, pScList[x]]
+                            break
+                            break
+        if AuthorsDic[n].numOfSubmittedPapers == 0:
+            print(f"ERROR: Could not find a way to get author {n} into list of papers!")
+                
     return toBeSubmitted
