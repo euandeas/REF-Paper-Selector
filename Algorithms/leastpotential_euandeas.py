@@ -1,5 +1,7 @@
 from collections import defaultdict
 
+class BreakIt(Exception): pass
+
 class Author():
     maxPapersPerAuthor = 0
     top5Total = 0
@@ -78,7 +80,6 @@ def FindPapers(pAllList, numOfPapers):
     pScList = {k: v for k, v in sorted(pScList.items(), key=lambda item: item[1], reverse= True)}
 
     for x in pScList:
-        tempListOfAuthors = []
         tempListOfAuthors = pAList[x]
         
         authorToPick = []
@@ -112,48 +113,53 @@ def FindPapers(pAllList, numOfPapers):
         authorNowSubmitted = False
         if AuthorsDic[n].numOfSubmittedPapers == 0:
             #Checks to see if it can replace a low scoring paper with one of the authors if its a higher score
-            for x in AuthorsDic[n].papers:
-                if any(x in sublist for sublist in toBeSubmitted) == False:
-                    for sublist in toBeSubmitted[::-1]: 
-                        if AuthorsDic[sublist[1]].numOfSubmittedPapers > 1 and pScList[x] >= sublist[2]:
-                            index = toBeSubmitted.index(sublist)
-                            AuthorsDic[sublist[1]].numOfSubmittedPapers -= 1
-                            AuthorsDic[n].numOfSubmittedPapers += 1
-                            toBeSubmitted[index] = [x, n, pScList[x]]
-                            authorNowSubmitted = True
-                            break
-                            break
-                        if pScList[x] < sublist[2]:
-                            break
-
-            #Checks to see if it can replace any co-authored papers as to minimize the affect of switching an author               
-            if authorNowSubmitted == False:    
-                for x in AuthorsDic[n].papers:
-                    if any(x in sublist for sublist in toBeSubmitted):
-                        for sublist in toBeSubmitted:
-                            if AuthorsDic[sublist[1]].numOfSubmittedPapers > 1 and sublist[0] == x:
-                                index = toBeSubmitted.index(sublist)
-                                AuthorsDic[sublist[1]].numOfSubmittedPapers -= 1
-                                toBeSubmitted[index][1] = n
-                                AuthorsDic[n].numOfSubmittedPapers += 1
-                                authorNowSubmitted = True
-                                break
-                                break
-            
-            #Replaces the lowest score possible as long as it wont make an author not have enough papers
-            if authorNowSubmitted == False:    
+            try:
                 for x in AuthorsDic[n].papers:
                     if any(x in sublist for sublist in toBeSubmitted) == False:
                         for sublist in toBeSubmitted[::-1]: 
-                            if AuthorsDic[sublist[1]].numOfSubmittedPapers > 1:
+                            if AuthorsDic[sublist[1]].numOfSubmittedPapers > 1 and pScList[x] >= sublist[2]:
                                 index = toBeSubmitted.index(sublist)
                                 AuthorsDic[sublist[1]].numOfSubmittedPapers -= 1
                                 AuthorsDic[n].numOfSubmittedPapers += 1
                                 toBeSubmitted[index] = [x, n, pScList[x]]
                                 authorNowSubmitted = True
+                                raise BreakIt
+                            if pScList[x] < sublist[2]:
                                 break
-                                break
+            except BreakIt:
+                pass
 
+            #Checks to see if it can replace any co-authored papers as to minimize the affect of switching an author               
+            if authorNowSubmitted == False:  
+                try:  
+                    for x in AuthorsDic[n].papers:
+                        if any(x in sublist for sublist in toBeSubmitted):
+                            for sublist in toBeSubmitted:
+                                if AuthorsDic[sublist[1]].numOfSubmittedPapers > 1 and sublist[0] == x:
+                                    index = toBeSubmitted.index(sublist)
+                                    AuthorsDic[sublist[1]].numOfSubmittedPapers -= 1
+                                    toBeSubmitted[index][1] = n
+                                    AuthorsDic[n].numOfSubmittedPapers += 1
+                                    authorNowSubmitted = True
+                                    raise BreakIt
+                except BreakIt:
+                    pass
+            
+            #Replaces the lowest score possible as long as it wont make an author not have enough papers
+            if authorNowSubmitted == False: 
+                try:   
+                    for x in AuthorsDic[n].papers:
+                        if any(x in sublist for sublist in toBeSubmitted) == False:
+                            for sublist in toBeSubmitted[::-1]: 
+                                if AuthorsDic[sublist[1]].numOfSubmittedPapers > 1:
+                                    index = toBeSubmitted.index(sublist)
+                                    AuthorsDic[sublist[1]].numOfSubmittedPapers -= 1
+                                    AuthorsDic[n].numOfSubmittedPapers += 1
+                                    toBeSubmitted[index] = [x, n, pScList[x]]
+                                    authorNowSubmitted = True
+                                    raise BreakIt
+                except BreakIt:
+                    pass
 
         if AuthorsDic[n].numOfSubmittedPapers == 0:
             print(f"ERROR: Could not find a way to get author {n} into list of papers!")
