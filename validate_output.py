@@ -31,7 +31,7 @@ def Validate(inList, outList, maxPerAuthor, verbose):
 
     for n in outList:
         if n[0] in listOfPapers:
-            listOfDuplicatedPapers.append(n[0])
+            duplicatePapers.append(n[0])
         else:
             listOfPapers.append(n[0])
 
