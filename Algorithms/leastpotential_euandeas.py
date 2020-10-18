@@ -143,15 +143,16 @@ def FindPapers(pAllList, numOfPapers):
             #Replaces the lowest score possible as long as it wont make an author not have enough papers
             if authorNowSubmitted == False:    
                 for x in AuthorsDic[n].papers:
-                    for sublist in toBeSubmitted[::-1]: 
-                        if AuthorsDic[sublist[1]].numOfSubmittedPapers > 1:
-                            index = toBeSubmitted.index(sublist)
-                            AuthorsDic[sublist[1]].numOfSubmittedPapers -= 1
-                            AuthorsDic[n].numOfSubmittedPapers += 1
-                            toBeSubmitted[index] = [x, n, pScList[x]]
-                            authorNowSubmitted = True
-                            break
-                            break
+                    if any(x in sublist for sublist in toBeSubmitted) == False:
+                        for sublist in toBeSubmitted[::-1]: 
+                            if AuthorsDic[sublist[1]].numOfSubmittedPapers > 1:
+                                index = toBeSubmitted.index(sublist)
+                                AuthorsDic[sublist[1]].numOfSubmittedPapers -= 1
+                                AuthorsDic[n].numOfSubmittedPapers += 1
+                                toBeSubmitted[index] = [x, n, pScList[x]]
+                                authorNowSubmitted = True
+                                break
+                                break
 
 
         if AuthorsDic[n].numOfSubmittedPapers == 0:
