@@ -43,7 +43,7 @@ The script should print the final selection as a .csv file containing n outputs,
 
 -v = run validate_output.py on the final list to check the validity of the final list<br>
 -v x = validate with a limit of x papers per author (default = 5)<br>
--v true = run validate_output.py in verbose mode\n<br>
+-v true = run validate_output.py in verbose mode<br>
 
 -s = show score of produced list (rounded down to the nearest 0.2)<br>
 -s raw = show the raw value of the score
