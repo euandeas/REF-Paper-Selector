@@ -42,12 +42,6 @@ def GetPapersAuthorsDic(mList):
         fDic[x[1]].append(x[0])    
     return fDic
 
-def GetAuthorsList(mList):
-    finalDic = defaultdict(int)
-    for x in mList:
-        finalDic[x[0]] = None  
-    return finalDic
-
 def GetAuthorsPapersDic(mList):
     fDic = defaultdict(list)
     for x in mList:
