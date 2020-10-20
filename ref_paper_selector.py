@@ -25,21 +25,34 @@ def Finalise(save, validateList, showScore, showRawScore, verbose, savePath, aut
 
 if __name__ == "__main__":
     try:
-        epi = """ALGORITHMS:\nleastpotential_euandeas\nnottingham_lembn\nabased_lembn\n\nCreated by https://github.com/euandeas, https://github.com/lembn\nv1.0.1"""
+        epi = """
+ALGORITHMS:
+  leastpotential_euandeas
+  nottingham_lembn
+  abased_lembn
+
+FOLLOW THE PROJECT: github.com/euandeas/REF-Paper-Selector
+
+Created by:
+  Euan Deas (github.com/euandeas)
+  Lemuel Bodi-Ngwala (github.com/lembn)
+  
+v1.1.0"""
 
         parser = argparse.ArgumentParser(prog='REFSelector',
                                          allow_abbrev=False,
+                                         formatter_class=argparse.RawTextHelpFormatter,
                                          description='Create a list of the highest scoring papers.',
                                          epilog=epi)
 
-        parser.add_argument('-i', '--infile', action='store', help='input file name and location e.g. c:/user/REF/input.csv.')
+        parser.add_argument('-i', '--infile', metavar="[file]", action='store', help='input file name and location e.g. c:/user/REF/input.csv.')
         parser.add_argument('-n', '--N', action='store', type=int, help='number of papers to be selected.')
-        parser.add_argument('-nm', '--nMax', action='store', default=False, help='create a list of maximum number of papers.')
-        parser.add_argument('-r', '--runmode', action='store', help='selection algorithm to use e.g. leastpotential_euandeas.')
+        parser.add_argument('-nm', '--nMax', action='store_true', help='create a list of maximum number of papers.')
+        parser.add_argument('-r', '--runmode', metavar="[algorithm]", action='store', help='selection algorithm to use e.g. leastpotential_euandeas.')
         parser.add_argument('-o', '--output', action='store_true', help='save to output.csv saved in the same location as the input file.')
-        parser.add_argument('-ot', '--outputTo', action='store', default=False, help='save ouput to custom filepath.')
+        parser.add_argument('-ot', '--outputTo', metavar="[file]", action='store', default=False, help='save ouput to custom filepath.')
         parser.add_argument('-va', '--validate', action='store_true', help='run validate_output.py on the final list to check the validity of the final list.')
-        parser.add_argument('-val', '--validateLim', action='store', default=5, help='validate with a limit of x papers per author (default = 5).')
+        parser.add_argument('-val', '--validateLim', metavar="[x]", action='store', default=5, help='validate with a limit of x papers per author (default = 5).')
         parser.add_argument('-ve', '--verbose', action='store_true', help='run validate_output.py with verbose output. Only valid if --validate flag is passed.')
         parser.add_argument('-s', '--show', action='store_true', help='show score of produced list (rounded to the nearest 0.2).')
         parser.add_argument('-sr', '--showRaw', action='store_true', help='show score of produced list.')
