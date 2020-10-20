@@ -4,31 +4,30 @@ import math
 from Algorithms import leastpotential_euandeas as lpe, nottingham_lembn as nlbn, abased_lembn as albn
 import process_data as processor
 import validate_output as validator
-import testtools as tt
-
-testmode = True
 
 def HelpText():
-    print("-i              input file name and location e.g. c:/user/REF/input.csv")
-    print("-r              selection algorithm to use e.g. leastpotential_euandeas")
-    print("\n==========================================================================\n")
+    print("\n====================================================================================\n")
+    print("-i [filepath]            input file name and location e.g. c:/user/REF/input.csv")
+    print("-r [algorithm_name]      selection algorithm to use e.g. leastpotential_euandeas")
+    print("\n====================================================================================\n")
 
-    print("-n              total number of papers to be selected")
+    print("-n [x]                   select x papers")
     print("OPTIONS:")
-    print("-n max          set n to the highest possible value with the given dataset\n")
+    print("-n max                   set n to the highest possible value with the given dataset\n")
 
-    print("-o              save to output.csv saved in the same location as the input file")
+    print("-o true                  save to output.csv saved in the same location as the input file")
     print("OPTIONS:")
-    print("-o [filepath]   custom filepath or filename.\n")
+    print("-o [filepath]            custom filepath or filename.\n")
 
-    print("-v              run validate_output.py on the final list to check the validity of the final list") 
+    print("-v true                  run validate_output.py on the final list to check the validity of the final list") 
     print("OPTIONS:")
-    print("-v [x]            validate with a limit of x papers per author (default = 5)")
-    print("-v true         run validate_output.py in verbose mode\n")    
+    print("-v [x]                   validate with a limit of x papers per author (default = 5)")
+    print("-v true                  run validate_output.py in verbose mode\n")    
     
-    print("-s              show score of produced list (rounded down to the nearest 0.2)")
+    print("-s true                  show score of produced list (rounded down to the nearest 0.2)")
     print("OPTIONS:")
-    print("-s raw          show the raw value of the score")
+    print("-s raw                    show the raw value of the score")
+    print("\n====================================================================================\n")
 
 def GetFinalList(inList, n, runmode):
     if runmode == "leastpotential_euandeas":
@@ -69,7 +68,10 @@ if __name__ == "__main__":
         showScore = False
         showRawScore = False
 
-        opts, args = getopt.getopt(argv, 'i:o:n:r:h:v:s:')
+        opts, _ = getopt.getopt(argv, 'i:o:n:r:h:v:s:')
+        if len(opts) == 0:
+            HelpText()
+            exit()
         for opt, arg in opts:
             if opt == "-h":
                 HelpText()
@@ -96,12 +98,7 @@ if __name__ == "__main__":
                     showScore = True
                     if arg == "raw":
                         showRawScore = True
-                        showScore = False                
-
-        if testmode == True:
-            dataObj = tt.TestDataObject()
-            requiredArgs, maxN, save, savePath, validateList, authorLim, verbose, showScore, showRawScore = dataObj.GetData()            
-            requiredArgs[n] = int(requiredArgs[n])
+                        showScore = False
 
         empty = []
         for arg in requiredArgs:
