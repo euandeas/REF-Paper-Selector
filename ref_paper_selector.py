@@ -1,44 +1,8 @@
-import sys
-import getopt
 import math
+import argparse
 from Algorithms import leastpotential_euandeas as lpe, nottingham_lembn as nlbn, abased_lembn as albn
 import process_data as processor
 import validate_output as validator
-
-def RepresentsInt(s):
-    try: 
-        int(s)
-        return True
-    except ValueError:
-        return False
-
-def HelpText():
-    print("\n====================================================================================\n")
-    print("-i [filepath]            input file name and location e.g. c:/user/REF/input.csv\n")
-
-    print("-r [algorithm_name]      selection algorithm to use e.g. leastpotential_euandeas")
-    print("ALGORITHMS:")
-    print("leastpotential_euandeas")
-    print("nottingham_lembn")
-    print("abased_lembn\n")
-
-    print("-n [x]                   select x papers")
-    print("OPTIONS:")
-    print("-n max                   set n to the highest possible value with the given dataset\n")
-
-    print("-o true                  save to output.csv saved in the same location as the input file")
-    print("OPTIONS:")
-    print("-o [filepath]            custom filepath or filename.\n")
-
-    print("-v true                  run validate_output.py on the final list to check the validity of the final list") 
-    print("OPTIONS:")
-    print("-v [x]                   validate with a limit of x papers per author (default = 5)")
-    print("-v v                     run validate_output.py in verbose mode\n")  
-    
-    print("-s true                  show score of produced list (rounded down to the nearest 0.2)")
-    print("OPTIONS:")
-    print("-s raw                   show the raw value of the score")
-    print("\n====================================================================================\n")
 
 def GetFinalList(inList, n, runmode):
     if runmode == "leastpotential_euandeas":
@@ -47,100 +11,70 @@ def GetFinalList(inList, n, runmode):
         outList = nlbn.FindPapers(inList, n)
     elif runmode == "abased_lembn":
         outList = albn.FindPapers(inList, n)
-
     return outList
 
-def Finalise():
+def Finalise(save, validateList, showScore, showRawScore, verbose, savePath, authorLim):
     if save == True:
         processor.SavePaperList(outList, savePath)
-
     if validateList == True:
         validator.Validate(inList, outList, authorLim, verbose)
-
     if showScore == True:
         print(f"\nScore: {processor.RoundScore(processor.FindScore(outList))}")
-    elif showRawScore == True:
+    if showRawScore == True:
         print(f"\nScore: {processor.FindScore(outList)}")
 
 if __name__ == "__main__":
-    argv = sys.argv[1:]
     try:
-        infile = "infile (-i)"
-        n = "number of papers (-n)"
-        runmode = "runmode(-r)"
-        requiredArgs = {infile: None, n: None, runmode: None}
+        epi = """ALGORITHMS:\nleastpotential_euandeas\nnottingham_lembn\nabased_lembn\n\nCreated by https://github.com/euandeas, https://github.com/lembn\nv1.0.1"""
 
-        maxN = False
-        save = False
-        savePath = "output.csv"
-        validateList = False
-        authorLim = 5
-        verbose = False        
-        showScore = False
-        showRawScore = False
+        parser = argparse.ArgumentParser(prog='REFSelector',
+                                         allow_abbrev=False,
+                                         description='Create a list of the highest scoring papers.',
+                                         epilog=epi)
 
-        opts, _ = getopt.getopt(argv, 'i:o:n:r:h:v:s:')
-        if len(opts) == 0:
-            HelpText()
-            exit()
-        for opt, arg in opts:
-            if opt == "-h":
-                HelpText()
-                exit()
-            else:
-                if opt == "-i":
-                    requiredArgs[infile] = arg
-                elif opt == "-r":
-                    requiredArgs[runmode] = arg
-                elif opt == "-n":
-                    if arg == "max":
-                        maxN = True
-                    elif RepresentsInt(arg) == True:
-                        requiredArgs[n] = int(arg)
-                elif opt == "-o":
-                    if arg == "true":
-                        save = True
-                    else:
-                        save = True
-                        savePath = arg
-                elif opt == "-v":
-                    if arg == "true":
-                        validteList = True
-                    elif RepresentsInt(arg) == True:
-                        authorLim == int(arg)
-                        validteList = True
-                    elif arg == "v":
-                        validateList = True
-                        verbose = True
-                elif opt == "-s":
-                    if arg == "true":
-                        showScore = True
-                    if arg == "raw":
-                        showRawScore = True
-                        showScore = False
+        parser.add_argument('-i', '--infile', action='store', help='input file name and location e.g. c:/user/REF/input.csv.')
+        parser.add_argument('-n', '--N', action='store', type=int, help='number of papers to be selected.')
+        parser.add_argument('-nm', '--nMax', action='store', default=False, help='create a list of maximum number of papers.')
+        parser.add_argument('-r', '--runmode', action='store', help='selection algorithm to use e.g. leastpotential_euandeas.')
+        parser.add_argument('-o', '--output', action='store_true', help='save to output.csv saved in the same location as the input file.')
+        parser.add_argument('-ot', '--outputTo', action='store', default=False, help='save ouput to custom filepath.')
+        parser.add_argument('-va', '--validate', action='store_true', help='run validate_output.py on the final list to check the validity of the final list.')
+        parser.add_argument('-val', '--validateLim', action='store', default=5, help='validate with a limit of x papers per author (default = 5).')
+        parser.add_argument('-ve', '--verbose', action='store_true', help='run validate_output.py with verbose output. Only valid if --validate flag is passed.')
+        parser.add_argument('-s', '--show', action='store_true', help='show score of produced list (rounded to the nearest 0.2).')
+        parser.add_argument('-sr', '--showRaw', action='store_true', help='show score of produced list.')
+
+        args = parser.parse_args()
+        if args.outputTo == None:
+            args.outputTo = "output.csv"
+        if args.validateLim == None:
+            args.validateLim = 5
 
         empty = []
-        for arg in requiredArgs:
-            if requiredArgs[arg] == None:
-                empty.append(arg)
+        if args.infile == None:
+            empty.append("infile (-i)")
+        if args.N == None:
+            empty.append("number of papers (-n)")
+        if args.runmode == None:
+            empty.append("runmode (-r)")
         if len(empty) > 0:
             print("ERROR")
             print(f"Missing arguments: {empty}")
-            exit()        
+            exit()     
 
-        inList = processor.OpenPaperList(requiredArgs[infile])
+        inList = processor.OpenPaperList(args.infile)
         numAuthors = len(validator.GetAuthorsList(inList))
         highestN = 2.5 * numAuthors
-        if maxN == True:
-            requiredArgs[n] = math.trunc(highestN)
+        if args.nMax == True:
+            args.N = math.trunc(highestN)
         else:
-            if requiredArgs[n] < numAuthors or requiredArgs[n] > highestN:
+            if args.N < numAuthors or args.N > highestN:
                 print("ERROR")
                 print("n must be less than (2.5 * number of authors) and greater than (number of authors - 1)")
                 exit()
 
-        outList = GetFinalList(inList, requiredArgs[n], requiredArgs[runmode])
-        Finalise()
+        outList = GetFinalList(inList, args.N, args.runmode)
+        Finalise(args.output, args.validate, args.show, args.showRaw, args.verbose, args.outputTo, args.validateLim)
     except Exception as e:
         print('Something went wrong!')
         print(str(e))
