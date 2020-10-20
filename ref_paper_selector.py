@@ -14,9 +14,13 @@ def RepresentsInt(s):
 
 def HelpText():
     print("\n====================================================================================\n")
-    print("-i [filepath]            input file name and location e.g. c:/user/REF/input.csv")
+    print("-i [filepath]            input file name and location e.g. c:/user/REF/input.csv\n")
+
     print("-r [algorithm_name]      selection algorithm to use e.g. leastpotential_euandeas")
-    print("\n====================================================================================\n")
+    print("ALGORITHMS:")
+    print("leastpotential_euandeas")
+    print("nottingham_lembn")
+    print("abased_lembn\n")
 
     print("-n [x]                   select x papers")
     print("OPTIONS:")
