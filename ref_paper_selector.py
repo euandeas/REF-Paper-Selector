@@ -69,7 +69,10 @@ if __name__ == "__main__":
         showScore = False
         showRawScore = False
 
-        opts, args = getopt.getopt(argv, 'i:o:n:r:h:v:s:')
+        opts, _ = getopt.getopt(argv, 'i:o:n:r:h:v:s:')
+        if len(opts):
+            HelpText()
+            exit()
         for opt, arg in opts:
             if opt == "-h":
                 HelpText()
@@ -96,7 +99,7 @@ if __name__ == "__main__":
                     showScore = True
                     if arg == "raw":
                         showRawScore = True
-                        showScore = False                
+                        showScore = False        
 
         if testmode == True:
             dataObj = tt.TestDataObject()
