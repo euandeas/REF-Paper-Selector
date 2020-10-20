@@ -51,5 +51,6 @@ The script should print the final selection as a .csv file containing n outputs,
 # Highest Score Out Of Current Algorithms
 171.8
 
-This should be done using the test data in the repositry, along with a cap of 50 papers.
+This should be done using the test data in the repositry, along with a cap of 50 papers.<br>
+The theoretical max of the test data set without meeting the selection criteria is 180.4.
 
