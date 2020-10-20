@@ -38,7 +38,7 @@ Created by:
   Euan Deas (github.com/euandeas)
   Lemuel Bodi-Ngwala (github.com/lembn)
   
-v1.1.0"""
+v1.1.1"""
 
         parser = argparse.ArgumentParser(prog='REFSelector',
                                          allow_abbrev=False,
