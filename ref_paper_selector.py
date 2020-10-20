@@ -5,6 +5,13 @@ from Algorithms import leastpotential_euandeas as lpe, nottingham_lembn as nlbn,
 import process_data as processor
 import validate_output as validator
 
+def RepresentsInt(s):
+    try: 
+        int(s)
+        return True
+    except ValueError:
+        return False
+
 def HelpText():
     print("\n====================================================================================\n")
     print("-i [filepath]            input file name and location e.g. c:/user/REF/input.csv")
@@ -22,11 +29,11 @@ def HelpText():
     print("-v true                  run validate_output.py on the final list to check the validity of the final list") 
     print("OPTIONS:")
     print("-v [x]                   validate with a limit of x papers per author (default = 5)")
-    print("-v true                  run validate_output.py in verbose mode\n")    
+    print("-v v                     run validate_output.py in verbose mode\n")  
     
     print("-s true                  show score of produced list (rounded down to the nearest 0.2)")
     print("OPTIONS:")
-    print("-s raw                    show the raw value of the score")
+    print("-s raw                   show the raw value of the score")
     print("\n====================================================================================\n")
 
 def GetFinalList(inList, n, runmode):
@@ -79,23 +86,31 @@ if __name__ == "__main__":
             else:
                 if opt == "-i":
                     requiredArgs[infile] = arg
+                elif opt == "-r":
+                    requiredArgs[runmode] = arg
                 elif opt == "-n":
                     if arg == "max":
                         maxN = True
-                    else:
+                    elif RepresentsInt(arg) == True:
                         requiredArgs[n] = int(arg)
-                elif opt == "-r":
-                    requiredArgs[runmode] = arg
                 elif opt == "-o":
-                    save = True
-                    if arg == True:
+                    if arg == "true":
+                        save = True
+                    else:
+                        save = True
                         savePath = arg
                 elif opt == "-v":
-                    validteList = True
                     if arg == "true":
+                        validteList = True
+                    elif RepresentsInt(arg) == True:
+                        authorLim == int(arg)
+                        validteList = True
+                    elif arg == "v":
+                        validateList = True
                         verbose = True
                 elif opt == "-s":
-                    showScore = True
+                    if arg == "true":
+                        showScore = True
                     if arg == "raw":
                         showRawScore = True
                         showScore = False
