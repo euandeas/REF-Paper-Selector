@@ -31,22 +31,29 @@ The script should print the final selection as a .csv file containing n outputs,
   Comment - optional column to flag papers with possible alternatives if using option c above.
   
 # Commands
--i [filepath] = input file name and location e.g. c:/user/REF/input.csv
-
--r [algorithm_name] = runmode (The selection algorithm you want to run)
-
--n [x] = total number of unique papers to be selected. n must be integer greater or equal to the number of authors in the input file and less than 2.5*number of authors.<br>
--n max = set n to the highest possible value with the given dataset.
-
--o true = save to output.csv saved in the same location as the input file.
--o [filepath] = save to custom filepath.
-
--v true = run validate_output.py on the final list to check the validity of the final list<br>
--v x = validate with a limit of x papers per author (default = 5)<br>
--v v = run validate_output.py in verbose mode<br>
-
--s = show score of produced list (rounded down to the nearest 0.2)<br>
--s raw = show the raw value of the score
+  -h, --help = show this help message and exit
+  
+  -i [file], --infile [file] = input file name and location e.g. c:/user/REF/input.csv.
+  
+  -n N, --N N = number of papers to be selected.
+  
+  -nm, --nMax = create a list of maximum number of papers.
+  
+  -r [algorithm], --runmode [algorithm] = selection algorithm to use e.g. leastpotential_euandeas.
+  
+  -o, --output = save to output.csv saved in the same location as the input file.
+  
+  -ot [file], --outputTo [file] = save ouput to custom filepath.
+  
+  -va, --validate = run validate_output.py on the final list to check the validity of the final list.
+  
+  -val [x], --validateLim [x] = validate with a limit of x papers per author (default = 5).
+  
+  -ve, --verbose = run validate_output.py with verbose output. Only valid if --validate flag is passed.
+  
+  -s, --show = show score of produced list (rounded to the nearest 0.2).
+  
+  -sr, --showRaw = show score of produced list.
 
 # Highest Score Out Of Current Algorithms
 171.8
